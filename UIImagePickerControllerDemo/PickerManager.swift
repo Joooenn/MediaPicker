@@ -91,12 +91,10 @@ class PickerManager: NSObject {
             let image : CGImage = try generator.copyCGImage(at: time, actualTime: &actualTime)
             result = UIImage.init(cgImage: image)
         } catch {
-            
+            print("获取失败！")
         }
         return result
     }
     
-    
-    
-    
 }
+

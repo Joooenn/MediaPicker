@@ -17,15 +17,14 @@ class TakePhotoViewController: UIViewController, UIImagePickerControllerDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        
-        imageView.image = UIImage(named: "PNG")
         
         self.setupViews()
     }
     
     func setupViews() {
+        
+//        imageView.image = UIImage(named: "JPG")
+        imageView.image = UIImage(named: "PNG")
         
         self.title = "photoPicker"
         self.view.backgroundColor = UIColor.white
@@ -40,10 +39,15 @@ class TakePhotoViewController: UIViewController, UIImagePickerControllerDelegate
                 self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
                 self.imagePicker.mediaTypes = [kUTTypeImage as String]
                 self.imagePicker.cameraCaptureMode = UIImagePickerControllerCameraCaptureMode.photo
+                DispatchQueue.main.async {
+                    print("camera初始化成功！")
+                }
+            } else {
+                DispatchQueue.main.async {
+                    print("设备不支持拍照！")
+                }
             }
-            DispatchQueue.main.async {
-                print("camera初始化成功！")
-            }
+            
         }
     }
     
@@ -70,15 +74,16 @@ class TakePhotoViewController: UIViewController, UIImagePickerControllerDelegate
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         self.dismiss(animated: true, completion: nil)
     }
-
+    
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
+

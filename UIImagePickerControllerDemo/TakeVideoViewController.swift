@@ -9,6 +9,7 @@
 import UIKit
 import MobileCoreServices
 import AVFoundation
+import AVKit
 
 class TakeVideoViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
     
@@ -16,6 +17,7 @@ class TakeVideoViewController: UIViewController, UINavigationControllerDelegate,
     
     let imagePicker = UIImagePickerController()
     var resultUrl : URL! = nil
+    private lazy var playVC: AVPlayerViewController = AVPlayerViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,7 +31,7 @@ class TakeVideoViewController: UIViewController, UINavigationControllerDelegate,
         self.title = "videoPicker"
         self.view.backgroundColor = UIColor.white
         
-        let tap = UITapGestureRecognizer.init(target: self, action: #selector(playVideo(videoUrl:)))
+        let tap = UITapGestureRecognizer.init(target: self, action: #selector(self.playVideo(_:)))
         self.imageView.addGestureRecognizer(tap)
         
         self.setupImagePicker()
@@ -43,8 +45,8 @@ class TakeVideoViewController: UIViewController, UINavigationControllerDelegate,
                 self.imagePicker.sourceType = UIImagePickerControllerSourceType.camera
                 self.imagePicker.mediaTypes = [kUTTypeMovie as String]
                 self.imagePicker.delegate = self
-                if PickerManager().isFrontCameraAvailable() {
-                    self.imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.front
+                if PickerManager().isRearCameraAvailable() {
+                    self.imagePicker.cameraDevice = UIImagePickerControllerCameraDevice.rear
                 }
                 self.imagePicker.videoQuality = UIImagePickerControllerQualityType.typeMedium
                 self.imagePicker.videoMaximumDuration = 20
@@ -56,7 +58,7 @@ class TakeVideoViewController: UIViewController, UINavigationControllerDelegate,
             }
         }
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -69,11 +71,13 @@ class TakeVideoViewController: UIViewController, UINavigationControllerDelegate,
         }
     }
     
-    func playVideo(videoUrl :URL) {
+    func playVideo(_ tap :UITapGestureRecognizer) {
         
-//        let playVC = VideoPlayViewController()
-//        playVC.videoUrl = videoUrl
-//        self.navigationController?.pushViewController(playVC, animated: true)
+        if resultUrl != nil {
+            let player = AVPlayer(url: resultUrl!)
+            playVC.player = player
+            present(playVC, animated: true, completion: nil)
+        }
     }
     
     // MARK: - UIImagePickerViewControllerDelegate
@@ -92,13 +96,14 @@ class TakeVideoViewController: UIViewController, UINavigationControllerDelegate,
     
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }
+
